@@ -182,6 +182,6 @@ private fun openUrl(url: String) {
             Desktop.getDesktop().browse(URI(url))
         }
     } catch (e: Exception) {
-        e.printStackTrace()
+        println("Error opening url: ${e.message}")
     }
 }

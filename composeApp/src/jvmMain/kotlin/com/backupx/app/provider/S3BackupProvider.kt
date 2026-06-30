@@ -1,5 +1,6 @@
 package com.backupx.app.provider
 
+import com.backupx.app.helper.BookmarkHelper
 import com.backupx.app.helper.FileHelper
 import com.backupx.app.helper.SecretStoreHelper
 import com.backupx.app.model.BackupItem
@@ -39,7 +40,8 @@ class S3BackupProvider : BackupProvider {
             val settings = item.settings as S3Settings
 
             // validate inputs before opening a connection
-            val source = File(FileHelper.expandPath(item.sourcePath))
+            val sourcePath = BookmarkHelper.resolve(item.sourceBookmark, item.sourcePath)
+            val source = File(FileHelper.expandPath(sourcePath))
             if (item.sourcePath.isBlank() || !source.exists()) throw BackupException(Res.string.error_source_missing)
             if (settings.bucket.isBlank()) throw BackupException(Res.string.error_bucket_not_set)
 
