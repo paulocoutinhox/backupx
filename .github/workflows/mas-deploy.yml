@@ -62,6 +62,19 @@ jobs:
             echo "=== $f ==="
             cat "$f" || true
           done
+          echo "=== jpackage args files ==="
+          for a in composeApp/build/compose/tmp/*.args.txt; do
+            echo "--- $a ---"
+            cat "$a" || true
+            echo
+          done
+          echo "=== re-run packagePkg jpackage with --verbose (real productbuild error) ==="
+          PKG_ARGS="composeApp/build/compose/tmp/packagePkg.args.txt"
+          if [ -f "$PKG_ARGS" ]; then
+            "$JAVA_HOME/bin/jpackage" "@$PKG_ARGS" --verbose 2>&1 | tail -100 || true
+          else
+            echo "no packagePkg args file"
+          fi
 
       - name: Locate package
         id: pkg
