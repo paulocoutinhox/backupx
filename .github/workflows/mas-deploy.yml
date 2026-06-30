@@ -82,6 +82,13 @@ jobs:
 
       - name: Upload to App Store Connect
         env:
-          ASC_USERNAME: ${{ secrets.NOTARIZATION_USERNAME }}
-          ASC_PASSWORD: ${{ secrets.NOTARIZATION_PASSWORD }}
-        run: xcrun altool --upload-app --type macos --file "${{ steps.pkg.outputs.path }}" --username "$ASC_USERNAME" --password "$ASC_PASSWORD"
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_API_KEY: ${{ secrets.ASC_API_KEY }}
+        run: |
+          mkdir -p "$HOME/.private_keys"
+          echo "$ASC_API_KEY" | base64 --decode > "$HOME/.private_keys/AuthKey_${ASC_KEY_ID}.p8"
+          xcrun altool --upload-app --type macos \
+            --file "${{ steps.pkg.outputs.path }}" \
+            --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"
+          rm -f "$HOME/.private_keys/AuthKey_${ASC_KEY_ID}.p8"
