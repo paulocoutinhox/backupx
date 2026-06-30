@@ -126,6 +126,9 @@ compose.desktop {
                 appCategory = "public.app-category.utilities"
                 appStore = macAppStore
 
+                // arm64-only builds require a deployment target of 12.0+ to pass app store validation
+                minimumSystemVersion = "12.0"
+
                 val providers = project.providers
                 if (macAppStore) {
                     // app store: sandboxed, signed with the 3rd party mac developer certificates
