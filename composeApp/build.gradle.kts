@@ -2,6 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 group = "com.backupx"
 version = "1.0.0"
+val appBuildNumber = "12"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -128,6 +129,9 @@ compose.desktop {
 
                 // arm64-only builds require a deployment target of 12.0+ to pass app store validation
                 minimumSystemVersion = "12.0"
+
+                // unique build number (CFBundleVersion); bump appBuildNumber for each app store upload
+                packageBuildVersion = appBuildNumber
 
                 // the app only uses standard, exempt encryption (https/tls and the os keychain),
                 // so declare no non-exempt encryption to satisfy export compliance automatically
