@@ -16,7 +16,6 @@
     <string name="empty_title">Aún no hay copias</string>
     <string name="empty_subtitle">Añade una copia para elegir qué guardar y dónde</string>
     <string name="cd_open_destination">Abrir destino</string>
-    <string name="status_running">Ejecutando todo… %d%%</string>
     <string name="status_backing_up">Realizando copia… %d%%</string>
     <string name="status_completed">Completado</string>
     <string name="dialog_delete_title">Eliminar copia</string>
@@ -61,4 +60,6 @@
     <string name="test_failed">Error de conexión</string>
     <string name="placeholder_source">Selecciona un archivo o carpeta</string>
     <string name="placeholder_destination">Selecciona una carpeta de destino</string>
+    <string name="running_title">Ejecutando copias…</string>
+    <string name="label_overall">General</string>
 </resources>

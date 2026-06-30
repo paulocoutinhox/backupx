@@ -13,7 +13,6 @@ object WindowsHelper {
             Runtime.getRuntime().exec(arrayOf("explorer.exe", path))
         } catch (e: Exception) {
             println("Error opening in Explorer: ${e.message}")
-            e.printStackTrace()
         }
     }
 

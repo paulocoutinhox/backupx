@@ -48,3 +48,6 @@ temp/
 
 # local secrets (do not commit)
 /chaves.txt
+
+# mas build artifact (written by ci from secret)
+composeApp/embedded.provisionprofile

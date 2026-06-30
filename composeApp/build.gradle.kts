@@ -33,6 +33,28 @@ val generateBuildConfig = tasks.register("generateBuildConfig") {
     }
 }
 
+// the native library ships inside the app bundle so jpackage signs it with the app identity
+val appResourcesDir = layout.buildDirectory.dir("appResources")
+
+// compile the macOS native bridge (jni dylib) when building on macOS
+val compileMacBridge = tasks.register<Exec>("compileMacBridge") {
+    onlyIf { System.getProperty("os.name").lowercase().contains("mac") }
+    val source = file("src/jvmMain/native/macbridge.m")
+    val output = appResourcesDir.get().dir("macos").file("macbridge.dylib").asFile
+    val javaHome = System.getProperty("java.home")
+    inputs.file(source)
+    inputs.property("javaHome", javaHome)
+    outputs.file(output)
+    doFirst { output.parentFile.mkdirs() }
+    commandLine(
+        "clang", "-dynamiclib", "-fobjc-arc", "-mmacosx-version-min=11.0",
+        "-arch", "arm64", "-arch", "x86_64",
+        "-I", "$javaHome/include", "-I", "$javaHome/include/darwin",
+        "-framework", "Foundation", "-framework", "AppKit", "-framework", "Security",
+        "-o", output.absolutePath, source.absolutePath
+    )
+}
+
 kotlin {
     jvm()
 
@@ -63,16 +85,28 @@ kotlin {
     }
 }
 
+// build the native library before it is staged into the app bundle resources
+tasks.matching { it.name == "prepareAppResources" }.configureEach {
+    dependsOn(compileMacBridge)
+}
+
 
 compose.desktop {
     application {
         mainClass = "com.backupx.app.MainKt"
 
+        // -PmacAppStore=true switches to a sandboxed Mac App Store build (.pkg)
+        val macAppStore = (project.findProperty("macAppStore") as String?) == "true"
+
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            if (macAppStore) {
+                targetFormats(TargetFormat.Pkg)
+            } else {
+                targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            }
             packageName = "BackupX"
             packageVersion = version.toString()
-            appResourcesRootDir.set(project.layout.projectDirectory.dir("resources"))
+            appResourcesRootDir.set(appResourcesDir)
             copyright = "2026 Paulo Coutinho. All rights reserved."
             vendor = "Paulo Coutinho"
             licenseFile.set(project.file("../LICENSE.txt"))
@@ -89,18 +123,32 @@ compose.desktop {
             macOS {
                 iconFile.set(project.file("src/jvmMain/resources/icons/app.icns"))
                 bundleID = "com.backupx.app"
+                appCategory = "public.app-category.utilities"
+                appStore = macAppStore
 
-                signing {
-                    val providers = project.providers
-                    sign.set(true)
-                    identity.set(providers.environmentVariable("SIGNING_IDENTITY"))
-                }
+                val providers = project.providers
+                if (macAppStore) {
+                    // app store: sandboxed, signed with the 3rd party mac developer certificates
+                    entitlementsFile.set(project.file("entitlements-mac.plist"))
+                    runtimeEntitlementsFile.set(project.file("runtime-entitlements-mac.plist"))
+                    provisioningProfile.set(project.file("embedded.provisionprofile"))
 
-                notarization {
-                    val providers = project.providers
-                    appleID.set(providers.environmentVariable("NOTARIZATION_APPLE_ID"))
-                    teamID.set(providers.environmentVariable("NOTARIZATION_TEAM_ID"))
-                    password.set(providers.environmentVariable("NOTARIZATION_PASSWORD"))
+                    signing {
+                        sign.set(true)
+                        identity.set(providers.environmentVariable("MAS_APP_IDENTITY"))
+                    }
+                } else {
+                    // direct distribution: developer id, notarized dmg
+                    signing {
+                        sign.set(true)
+                        identity.set(providers.environmentVariable("SIGNING_IDENTITY"))
+                    }
+
+                    notarization {
+                        appleID.set(providers.environmentVariable("NOTARIZATION_APPLE_ID"))
+                        teamID.set(providers.environmentVariable("NOTARIZATION_TEAM_ID"))
+                        password.set(providers.environmentVariable("NOTARIZATION_PASSWORD"))
+                    }
                 }
             }
 

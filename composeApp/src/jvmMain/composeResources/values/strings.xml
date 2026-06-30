@@ -16,7 +16,6 @@
     <string name="empty_title">No backups yet</string>
     <string name="empty_subtitle">Add a backup to choose what to save and where</string>
     <string name="cd_open_destination">Open destination</string>
-    <string name="status_running">Running all… %d%%</string>
     <string name="status_backing_up">Backing up… %d%%</string>
     <string name="status_completed">Completed</string>
     <string name="dialog_delete_title">Delete Backup</string>
@@ -61,4 +60,6 @@
     <string name="test_failed">Connection failed</string>
     <string name="placeholder_source">Select a file or folder</string>
     <string name="placeholder_destination">Select a destination folder</string>
+    <string name="running_title">Running backups…</string>
+    <string name="label_overall">Overall</string>
 </resources>

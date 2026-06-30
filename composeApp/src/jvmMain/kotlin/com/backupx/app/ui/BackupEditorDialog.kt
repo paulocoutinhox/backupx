@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.backupx.app.helper.BookmarkHelper
 import com.backupx.app.helper.NativeDialogHelper
 import com.backupx.app.model.BackupItem
 import com.backupx.app.model.BackupProviderType
@@ -44,6 +45,7 @@ fun BackupEditorDialog(
 ) {
     var name by remember { mutableStateOf(item?.name ?: "") }
     var sourcePath by remember { mutableStateOf(item?.sourcePath ?: "") }
+    var sourceBookmark by remember { mutableStateOf(item?.sourceBookmark) }
     var provider by remember { mutableStateOf(item?.settings?.type ?: BackupProviderType.filesystem) }
 
     // the options follow the selected provider, so switching it swaps the fields
@@ -103,11 +105,11 @@ fun BackupEditorDialog(
                     placeholder = stringResource(Res.string.placeholder_source)
                 ) {
                     BrowseButton(label = stringResource(Res.string.browse_file), icon = Icons.AutoMirrored.Filled.InsertDriveFile) {
-                        NativeDialogHelper.openFile(pickFileTitle)?.let { sourcePath = it }
+                        NativeDialogHelper.openFile(pickFileTitle)?.let { sourcePath = it; sourceBookmark = BookmarkHelper.create(it) }
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     BrowseButton(label = stringResource(Res.string.browse_folder), icon = Icons.Default.FolderOpen) {
-                        NativeDialogHelper.openFolder(pickSourceFolderTitle)?.let { sourcePath = it }
+                        NativeDialogHelper.openFolder(pickSourceFolderTitle)?.let { sourcePath = it; sourceBookmark = BookmarkHelper.create(it) }
                     }
                 }
 
@@ -142,6 +144,7 @@ fun BackupEditorDialog(
                                     id = item?.id ?: newId(),
                                     name = name.trim(),
                                     sourcePath = sourcePath.trim(),
+                                    sourceBookmark = sourceBookmark,
                                     settings = settings
                                 ),
                                 if (secretRequired) secret else null
@@ -229,7 +232,7 @@ private fun ProviderOptions(
             ) {
                 BrowseButton(label = stringResource(Res.string.action_browse), icon = Icons.Default.FolderOpen) {
                     NativeDialogHelper.openFolder(pickDestinationTitle)?.let {
-                        onChange(settings.copy(destinationPath = it))
+                        onChange(settings.copy(destinationPath = it, destinationBookmark = BookmarkHelper.create(it)))
                     }
                 }
             }

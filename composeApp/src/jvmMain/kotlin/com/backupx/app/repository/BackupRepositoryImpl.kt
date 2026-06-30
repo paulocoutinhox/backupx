@@ -10,7 +10,6 @@ class BackupRepositoryImpl : BackupRepository {
 
     private val json = Json {
         prettyPrint = true
-        ignoreUnknownKeys = true
     }
 
     override fun load(): BackupConfig {

@@ -16,7 +16,6 @@ object UnixHelper {
             Runtime.getRuntime().exec(arrayOf("xdg-open", path))
         } catch (e: Exception) {
             println("Error opening in file manager: ${e.message}")
-            e.printStackTrace()
         }
     }
 

@@ -34,7 +34,6 @@ fun BackupScreen(viewModel: BackupViewModel) {
     val selectedId by viewModel.selectedId.collectAsState()
     val statuses by viewModel.statuses.collectAsState()
     val isRunningAll by viewModel.isRunningAll.collectAsState()
-    val overallProgress by viewModel.overallProgress.collectAsState()
 
     var editorItem by remember { mutableStateOf<BackupItem?>(null) }
     var showEditor by remember { mutableStateOf(false) }
@@ -66,12 +65,6 @@ fun BackupScreen(viewModel: BackupViewModel) {
                 },
                 onDelete = { showDeleteDialog = true }
             )
-
-            // overall progress stays visible while each card shows its own progress below
-            if (isRunningAll) {
-                Spacer(modifier = Modifier.height(16.dp))
-                OverallProgress(progress = overallProgress)
-            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -217,19 +210,6 @@ private fun Header(
                 Text(stringResource(Res.string.action_run_all))
             }
         }
-    }
-}
-
-@Composable
-private fun OverallProgress(progress: Float) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = formatResource(Res.string.status_running, (progress * 100).toInt()),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
     }
 }
 
