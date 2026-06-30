@@ -40,7 +40,7 @@
     <string name="provider_s3">Object Storage (S3)</string>
     <string name="about_version">Version %s</string>
     <string name="about_developer">Developer</string>
-    <string name="about_github">GitHub</string>
+    <string name="about_website">Website</string>
     <string name="about_description">A simple tool to back up your files and folders</string>
     <string name="about_copyright">© 2026 BackupX. All rights reserved.</string>
     <string name="dialog_pick_source_file">Select source file</string>

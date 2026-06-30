@@ -14,10 +14,16 @@ object FileHelper {
     private val isUnix = osName.contains("nix") || osName.contains("nux") || isMacOS
 
     /**
-     * Expand tilde (~) in paths to the user's home directory
+     * Expand a leading tilde (~) in a path to the user's home directory
+     * Only the home shortcut is expanded, tildes elsewhere in the path are left untouched
      */
     fun expandPath(path: String): String {
-        return path.replace("~", System.getProperty("user.home"))
+        val home = System.getProperty("user.home")
+        return when {
+            path == "~" -> home
+            path.startsWith("~/") -> home + path.substring(1)
+            else -> path
+        }
     }
 
     /**

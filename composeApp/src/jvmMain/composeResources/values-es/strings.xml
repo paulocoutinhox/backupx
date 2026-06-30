@@ -40,7 +40,7 @@
     <string name="provider_s3">Almacenamiento de objetos (S3)</string>
     <string name="about_version">Versión %s</string>
     <string name="about_developer">Desarrollador</string>
-    <string name="about_github">GitHub</string>
+    <string name="about_website">Sitio web</string>
     <string name="about_description">Una herramienta simple para hacer copias de seguridad de tus archivos y carpetas</string>
     <string name="about_copyright">© 2026 BackupX. Todos los derechos reservados.</string>
     <string name="dialog_pick_source_file">Seleccione el archivo de origen</string>

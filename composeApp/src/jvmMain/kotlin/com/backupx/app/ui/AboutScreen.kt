@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -77,10 +77,10 @@ fun AboutScreen() {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     LinkItem(
-                        icon = Icons.Default.Code,
-                        label = stringResource(Res.string.about_github),
-                        value = "github.com/paulocoutinhox/backupx",
-                        onClick = { openUrl("https://github.com/paulocoutinhox/backupx") }
+                        icon = Icons.Default.Public,
+                        label = stringResource(Res.string.about_website),
+                        value = "paulox.dev",
+                        onClick = { openUrl("https://paulox.dev") }
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
