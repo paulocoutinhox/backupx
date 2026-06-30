@@ -129,6 +129,12 @@ compose.desktop {
                 // arm64-only builds require a deployment target of 12.0+ to pass app store validation
                 minimumSystemVersion = "12.0"
 
+                // the app only uses standard, exempt encryption (https/tls and the os keychain),
+                // so declare no non-exempt encryption to satisfy export compliance automatically
+                infoPlist {
+                    extraKeysRawXml = "<key>ITSAppUsesNonExemptEncryption</key><false/>"
+                }
+
                 val providers = project.providers
                 if (macAppStore) {
                     // app store: sandboxed, signed with the 3rd party mac developer certificates
