@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "=== signing identities in keychain ==="
           security find-identity -v "$RUNNER_TEMP/backupx.keychain-db" || true
-          for f in composeApp/build/compose/logs/createDistributable/*.txt; do
+          for f in composeApp/build/compose/logs/*/*.txt; do
             echo "=== $f ==="
             cat "$f" || true
           done
