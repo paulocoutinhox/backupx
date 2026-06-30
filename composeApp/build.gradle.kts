@@ -2,7 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 group = "com.backupx"
 version = "1.0.0"
-val appBuildNumber = "14"
+val appBuildNumber = "15"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
